@@ -1,17 +1,65 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from 'react';
+import WaveBackground from '@/components/WaveBackground';
+import NavBar from '@/components/NavBar';
+import HomePage from '@/pages/HomePage';
+import ChatsPage from '@/pages/ChatsPage';
+import CallsPage from '@/pages/CallsPage';
+import ContactsPage from '@/pages/ContactsPage';
+import ProfilePage from '@/pages/ProfilePage';
+import SettingsPage from '@/pages/SettingsPage';
+import AuthPage from '@/pages/AuthPage';
 
-const Index = () => {
+type Page = 'home' | 'chats' | 'calls' | 'contacts' | 'profile' | 'settings' | 'auth';
+
+export default function Index() {
+  const [page, setPage]     = useState<Page>('auth');
+  const [authed, setAuthed] = useState(false);
+
+  const handleAuth = () => {
+    setAuthed(true);
+    setPage('home');
+  };
+
+  const handleNavigate = (p: Page) => {
+    if (p === 'auth') {
+      setAuthed(false);
+      setPage('auth');
+      return;
+    }
+    setPage(p);
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4 color-black text-black">Добро пожаловать!</h1>
-        <p className="text-xl text-gray-600">тут будет отображаться ваш проект</p>
+    <div className="relative w-screen h-screen overflow-hidden flex">
+      <WaveBackground />
+
+      <div className="relative z-10 flex w-full h-full">
+        {authed && (
+          <NavBar current={page} onNavigate={handleNavigate} />
+        )}
+
+        <div
+          className="flex-1 flex overflow-hidden"
+          key={page}
+          style={{ animation: 'fadeIn 0.3s ease-out' }}
+        >
+          {!authed ? (
+            <AuthPage onAuth={handleAuth} />
+          ) : page === 'home' ? (
+            <HomePage onNavigate={handleNavigate} />
+          ) : page === 'chats' ? (
+            <ChatsPage />
+          ) : page === 'calls' ? (
+            <CallsPage />
+          ) : page === 'contacts' ? (
+            <ContactsPage />
+          ) : page === 'profile' ? (
+            <ProfilePage />
+          ) : page === 'settings' ? (
+            <SettingsPage />
+          ) : null}
+        </div>
       </div>
-      <span className="absolute bottom-8 left-1/2 -translate-x-1/2 inline-block bg-[#FF6637] text-white text-sm px-4 py-2 rounded-full whitespace-nowrap">
-        Подождите 5 минут, Юра создает первую версию проекта с нуля
-      </span>
     </div>
   );
-};
-
-export default Index;
+}
