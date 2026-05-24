@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AppProvider } from '@/lib/AppContext';
 import WaveBackground from '@/components/WaveBackground';
 import NavBar, { type Page } from '@/components/NavBar';
 import HomePage from '@/pages/HomePage';
@@ -10,7 +11,7 @@ import ProfilePage from '@/pages/ProfilePage';
 import SettingsPage from '@/pages/SettingsPage';
 import AuthPage from '@/pages/AuthPage';
 
-export default function Index() {
+function NemoApp() {
   const [page, setPage]     = useState<Page>('auth');
   const [authed, setAuthed] = useState(false);
 
@@ -58,5 +59,13 @@ export default function Index() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Index() {
+  return (
+    <AppProvider>
+      <NemoApp />
+    </AppProvider>
   );
 }
