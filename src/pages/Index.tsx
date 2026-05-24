@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import WaveBackground from '@/components/WaveBackground';
-import NavBar from '@/components/NavBar';
+import NavBar, { type Page } from '@/components/NavBar';
 import HomePage from '@/pages/HomePage';
 import ChatsPage from '@/pages/ChatsPage';
 import CallsPage from '@/pages/CallsPage';
 import ContactsPage from '@/pages/ContactsPage';
+import StoriesPage from '@/pages/StoriesPage';
 import ProfilePage from '@/pages/ProfilePage';
 import SettingsPage from '@/pages/SettingsPage';
 import AuthPage from '@/pages/AuthPage';
-
-type Page = 'home' | 'chats' | 'calls' | 'contacts' | 'profile' | 'settings' | 'auth';
 
 export default function Index() {
   const [page, setPage]     = useState<Page>('auth');
@@ -38,17 +37,15 @@ export default function Index() {
           <NavBar current={page} onNavigate={handleNavigate} />
         )}
 
-        <div
-          className="flex-1 flex overflow-hidden"
-          key={page}
-          style={{ animation: 'fadeIn 0.3s ease-out' }}
-        >
+        <div className="flex-1 flex overflow-hidden" key={page} style={{ animation: 'fadeIn 0.3s ease-out' }}>
           {!authed ? (
             <AuthPage onAuth={handleAuth} />
           ) : page === 'home' ? (
             <HomePage onNavigate={handleNavigate} />
           ) : page === 'chats' ? (
             <ChatsPage />
+          ) : page === 'stories' ? (
+            <StoriesPage />
           ) : page === 'calls' ? (
             <CallsPage />
           ) : page === 'contacts' ? (
